@@ -11,17 +11,6 @@ class ProductView(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
-class BuyView(viewsets.ModelViewSet):
-    serializer_class = BuySerializer
-    queryset = Buy.objects.all()
-
-
-def UpdateStock(id, newStock):
-    product = Product.objects.get(id=id)
-    product.stock = newStock
-    product.save()
-    return product
-
 class ProductViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'])
     def get_product(self, request):
@@ -109,6 +98,45 @@ class ProductViewSet(viewsets.ViewSet):
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    
+
+class BuyView(viewsets.ModelViewSet):
+    serializer_class = BuySerializer
+    queryset = Buy.objects.all()
+
+
+    @action(detail=False, methods=['get'])
+    def get_buys(self, request):
+        try:
+            buys = Buy.objects.all()
+            serializer = self.get_serializer(buys, many=True)
+            
+            return Response(serializer.data)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+    @action(detail=False, methods=['post'])
+    def save_buy(self, request):
+        buy_data_list: request.data
+        try:
+            serializer = BuySerializer(data=buy_data_list, many=True)
+
+            if serializer.is_Valid():
+                serializer.save()
+                return Response(status=status.HTTP_201_CREATED)
+            else:
+        
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+
+
+
+
         
     
         
