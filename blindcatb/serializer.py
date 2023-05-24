@@ -7,6 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__' 
 
 class BuySerializer(serializers.ModelSerializer):
+    totalPrice = serializers.ReadOnlyField()
     class Meta:
         model = Buy
         fields = '__all__'

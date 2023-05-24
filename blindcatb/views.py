@@ -135,9 +135,11 @@ class BuyView(viewsets.ModelViewSet):
                         buy_data['totalPrice'] = total_price
                         
                 serializer.save()
-                return Response(status=status.HTTP_201_CREATED)
+
+                updated_data = serializer.data
+                return Response(updated_data, status=status.HTTP_201_CREATED)
             else:
-        
+
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
