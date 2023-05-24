@@ -16,23 +16,27 @@ class Product(models.Model):
         return self.productName
 
 class Buy(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=None, null=True)
     quantity = models.IntegerField(default=0)
-    totalPrice = models.IntegerField()
+    totalPrice = models.IntegerField(default=0)
     date = models.DateTimeField(null=True, blank=True)
     clientIdType = models.CharField(max_length=5)
     clientId = models.CharField(max_length=20)
     clientName = models.CharField(max_length=200)
+
+    def save(self, *args, **kwargs):
+        self.totalPrice = self.quantity*self.product.productPrice
+        super().save(*args, **kwargs)
     
     def __str__(self):
-        return str(self.date)
+        return f"{self.product}, {self.date}"
 
 
 class PurchaseDetail(models.Model):
     
     buy = models.ForeignKey(Buy, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
-    totalPrice = models.IntegerField()
+    totalPrice = models.IntegerField(default=0)
 
     def __str(self):
         return self.product

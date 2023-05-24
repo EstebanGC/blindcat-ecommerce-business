@@ -125,6 +125,15 @@ class BuyView(viewsets.ModelViewSet):
             serializer = BuySerializer(data=buy_data_list, many=True)
 
             if serializer.is_Valid():
+                for buy_data in serializer.validated_data:
+                    product = buy_data['product']
+                    quantity = buy_data['quantity']
+
+                    if product:
+                        product_price = product.productPrice
+                        total_price = quantity*product_price
+                        buy_data['totalPrice'] = total_price
+                        
                 serializer.save()
                 return Response(status=status.HTTP_201_CREATED)
             else:
