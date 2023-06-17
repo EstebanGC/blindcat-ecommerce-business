@@ -8,6 +8,6 @@ const buyApi = axios.create({
 
 export const getAllBuys = () => buyApi.get('/');
 
-export const createBuy = () => buyApi.create('/');
+export const createBuy = () => buyApi.post('/', buy);
 
 

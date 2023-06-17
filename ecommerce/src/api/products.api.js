@@ -6,5 +6,6 @@ const productApi = axios.create({
 
 export const getAllProducts = () => productApi.get('/');
 
-
 export const createProduct = (product) => productApi.post('/', product);
+
+
