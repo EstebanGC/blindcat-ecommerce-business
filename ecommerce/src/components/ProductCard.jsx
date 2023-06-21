@@ -1,13 +1,24 @@
-export function ProductCard({product}) {
-    return (
-        <div> 
-            <h1>Product: {product.productName}</h1>
-            <h3>Description: {product.description}</h3>
-            <h3>Price: {product.productPrice}</h3>
-            <h3>Quantity {product.producQuantity}</h3>
-            <h3>Stock: {product.stock}</h3>
-            <h3>Minimum units: {product.minProduct}</h3>
-            <hr/>
-        </div>
-    )
+import { Link } from "react-router-dom";
+
+export function ProductCard({ product }) {
+  return (
+    <>
+      
+        <Link to="/products-create">
+          <button>Botón</button>
+        </Link>
+      
+      <div>
+        <h3>Product: {product.productName}</h3>
+      </div>
+      <div>
+        <p>Description: {product.description}</p>
+        <p>Price: {product.productPrice}</p>
+        <p>Quantity: {product.producQuantity}</p>
+        <p>Stock: {product.stock}</p>
+        <p>Minimum units: {product.minProduct}</p>
+        <hr />
+      </div>
+    </>
+  );
 }

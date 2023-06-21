@@ -14,7 +14,9 @@ export function BuyList(){
         loadBuys();
     }, []);
 
-    return <div>{buy.map(buy => (
+    return <div>
+        <h1>Buy List</h1>
+        {buy.map(buy => (
         <BuyCard key={buy.id} buy={buy}/>
     ))}</div>
 }
