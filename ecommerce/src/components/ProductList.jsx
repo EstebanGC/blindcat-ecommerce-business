@@ -1,42 +1,44 @@
-import React , { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getAllProducts } from "../api/products.api";
 import { ProductCard } from "./ProductCard";
 
 export function ProductList() {
-    const [product, setProduct] = useState([]);
-    const [filters, setFilters] = useState({
-      productName: 'all',
-      minPrice: 0,
-      maxPrice: 10000,
+  const [allProducts, setAllProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filters, setFilters] = useState({
+    productName: "all",
+    minPrice: 0,
+    maxPrice: 10000,
+  });
+
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+  };
+
+  const handleFilterSubmit = () => {
+    const filteredProducts = allProducts.filter((product) => {
+      return (
+        product.productPrice >= filters.minPrice &&
+        product.productPrice <= filters.maxPrice &&
+        (filters.productName === "all" || product.productName === filters.productName)
+      );
     });
-  
-    const handleFilterChange = (event) => {
-        const { name, value } = event.target;
-        setFilters((prevFilters) => ({
-          ...prevFilters,
-          [name]: value,
-        }));
-      };
+    setFilteredProducts(filteredProducts);
+  };
 
-    const handleFilterSubmit = () => {
-      return product.filter((product) => {
-        return (
-          product.productPrice >= filters.minPrice &&
-          product.productPrice <= filters.maxPrice &&
-          (filters.productName === 'all' || product.productName === filters.productName)
-        );
-      });
-    };
-  
-    useEffect(() => {
-      async function loadProducts() {
-        const res = await getAllProducts();
-        const filteredProducts = handleFilterSubmit(res.data); // Aplicar los filtros aquí
-        setProduct(filteredProducts);
-      }
-      loadProducts();
-    }, [filters]);
-
+  useEffect(() => {
+    async function loadProducts() {
+      const res = await getAllProducts();
+      const productsData = res.data;
+      setAllProducts(productsData);
+      setFilteredProducts(productsData);
+    }
+    loadProducts();
+  }, []);
 
   return (
     <div>
@@ -66,7 +68,7 @@ export function ProductList() {
         <button onClick={handleFilterSubmit}>Apply Filters</button>
       </div>
 
-      {product.map((product) => (
+      {filteredProducts.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
     </div>
