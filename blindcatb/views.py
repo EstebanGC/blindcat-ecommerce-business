@@ -4,14 +4,20 @@ from rest_framework.decorators import action
 from .serializer import ProductSerializer, BuySerializer
 from .models import Product, Buy
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import permission_required
+
+
 
 
 # Create your views here.
+
 class ProductView(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
 class ProductViewSet(viewsets.ViewSet):
+
+    @permission_required('blindcatb.view_product', raise_exception=True)
     @action(detail=False, methods=['get'])
     def get_product(self, request):
         page = request.GET.get('page', 1)
@@ -39,6 +45,7 @@ class ProductViewSet(viewsets.ViewSet):
         
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+    @permission_required('create_product', raise_exception=True)   
     @action(detail=False, methods=['post'])
     def save_product(self, request):
         product_data_list = request.data
@@ -53,8 +60,9 @@ class ProductViewSet(viewsets.ViewSet):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
-
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                
+    @permission_required('edit_product', raise_exception=True)
     @action(detail=False, methods=['put'])
     def update_product(self, request):
         product_id = request.data.get('id')
@@ -79,7 +87,7 @@ class ProductViewSet(viewsets.ViewSet):
         except Exception as e:
              return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-    
+    @permission_required('delete_product', raise_exception=True)
     @action(detail=False, methods=['delete'])
     def delete_product(self, request):
         product_id = request.data.get('id')

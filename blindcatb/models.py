@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser, Group, Permission
 
 
 # Create your models here.
@@ -30,7 +31,19 @@ class Buy(models.Model):
     
     def __str__(self):
         return f"{self.product}, {self.date}"
+    
 
+class User(AbstractUser):
+    seller = models.CharField(max_length=50)
+    groups = models.ManyToManyField(Group, related_name='custom_user_set')
+    user_permissions = models.ManyToManyField(Permission, related_name='custom_user_set')
+    class Meta:
+        permissions = [
+            ('view_product', 'Can view products'),
+            ('edit_product', 'Can edit products'),
+            ('delete_product', 'Can delete products'),
+            ('create_product', 'Can create product')
+        ]
 
 class PurchaseDetail(models.Model):
     

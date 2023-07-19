@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
+import { ProductList } from "./ProductList";
 
-export function ProductCard({ product }) {
+export function ProductCard({ product, handleAddToCart }) {
   return (
     <>
       
@@ -17,6 +18,7 @@ export function ProductCard({ product }) {
         <p>Quantity: {product.producQuantity}</p>
         <p>Stock: {product.stock}</p>
         <p>Minimum units: {product.minProduct}</p>
+        <button onClick={() => handleAddToCart(product)}>Add to Cart</button>
         <hr />
       </div>
     </>
