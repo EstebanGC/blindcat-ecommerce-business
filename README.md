@@ -1,8 +1,8 @@
-# BlindCatBusiness
+# 🍀 Blind Cat Business
 
 Ecommerce site written in Django Rest Framework for the backend with SQLite and React for the client side.
 
-To execute: 
+## 🛠 To execute: 
 
 -Install Python and Node
 
